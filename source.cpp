@@ -1,86 +1,98 @@
 #include <iostream>
 #include <string>
-int data[200000];
-int start = 0;
-int end = 0;
-int min[200000];
-int startmin = 0;
-int endmin = 0;
-void Enqueue(int a) {
-  data[end] = a;
-  end++;
-  std::cout << "ok" << std::endl;
-  while (endmin > startmin) {
-    if (a <= data[min[endmin - 1]]) {
-      endmin--;
+
+class Queue {
+ private:
+  int data_[200000];
+  int min_[200000];
+  int start_, end_, startmin_, endmin_;
+
+ public:
+  Queue() : start_(0), end_(0), startmin_(0), endmin_(0) {}
+
+  void Enqueue(int a) {
+    data_[end_] = a;
+    end_++;
+    std::cout << "ok" << std::endl;
+    while (endmin_ > startmin_) {
+      if (a <= data_[min_[endmin_ - 1]]) {
+        endmin_--;
+      } else {
+        break;
+      }
+    }
+    min_[endmin_] = end_ - 1;
+    ++endmin_;
+  }
+
+  void Dequeue() {
+    if (end_ == start_) {
+      std::cout << "error" << std::endl;
     } else {
-      break;
+      std::cout << data_[start_] << std::endl;
+      start_++;
+      if ((start_ - 1) == min_[startmin_]) {
+        startmin_++;
+      }
     }
   }
-  min[endmin] = end - 1;
-  ++endmin;
-}
-void Dequeue() {
-  if (end == start) {
-    std::cout << "error" << std::endl;
-  } else {
-    std::cout << data[start] << std::endl;
-    start++;
-    if ((start - 1) == min[startmin]) {
-      startmin++;
+
+  void Front() {
+    if ((end_ - start_) == 0) {
+      std::cout << "error" << std::endl;
+    } else {
+      std::cout << data_[start_] << std::endl;
     }
   }
-}
-void Front() {
-  if ((end - start) == 0) {
-    std::cout << "error" << std::endl;
-  } else {
-    std::cout << data[start] << std::endl;
+
+  int Size() { return (end_ - start_); }
+
+  void Clear() {
+    start_ = 0;
+    end_ = 0;
+    std::cout << "ok" << std::endl;
+    startmin_ = 0;
+    endmin_ = 0;
   }
-}
-int Size() { return (end - start); }
-void Clear() {
-  start = 0;
-  end = 0;
-  std::cout << "ok" << std::endl;
-  startmin = 0;
-  endmin = 0;
-}
-void Min() {
-  if ((end - start) == 0) {
-    std::cout << "error" << std::endl;
-  } else {
-    std::cout << data[min[startmin]] << std::endl;
+
+  void Min() {
+    if ((end_ - start_) == 0) {
+      std::cout << "error" << std::endl;
+    } else {
+      std::cout << data_[min_[startmin_]] << std::endl;
+    }
   }
-}
-void Command() {
+};
+
+void Command(Queue& q) {
   std::string input;
   std::cin >> input;
   if (input == "enqueue") {
     int element;
     std::cin >> element;
-    Enqueue(element);
+    q.Enqueue(element);
   }
   if (input == "dequeue") {
-    Dequeue();
+    q.Dequeue();
   }
   if (input == "front") {
-    Front();
+    q.Front();
   }
   if (input == "size") {
-    std::cout << Size() << std::endl;
+    std::cout << q.Size() << std::endl;
   }
   if (input == "clear") {
-    Clear();
+    q.Clear();
   }
   if (input == "min") {
-    Min();
+    q.Min();
   }
 }
 int main() {
   int n = 0;
   std::cin >> n;
+  Queue q;
   for (int i = 0; i < n; ++i) {
-    Command();
+    Command(q);
   }
 }
