@@ -1,9 +1,7 @@
 #include <deque>
 #include <iostream>
 
-std::deque<int> goblin1;
-std::deque<int> goblin2;
-void Defolt(int number) {
+void Defolt(int number, std::deque<int> &goblin1, std::deque<int> &goblin2) {
   goblin2.push_back(number);
   if (goblin1.size() < goblin2.size()) {
     int n;
@@ -13,7 +11,7 @@ void Defolt(int number) {
   }
 }
 
-void Vipgoblin(int number) {
+void Vipgoblin(int number, std::deque<int> &goblin1, std::deque<int> &goblin2) {
   if (goblin1.size() > goblin2.size()) {
     goblin2.push_front(number);
   } else if (goblin1.size() == goblin2.size()) {
@@ -21,7 +19,7 @@ void Vipgoblin(int number) {
   }
 }
 
-void Gotoshaman() {
+void Gotoshaman(std::deque<int> &goblin1, std::deque<int> &goblin2) {
   std::cout << goblin1.front() << std::endl;
   goblin1.pop_front();
   if (goblin1.size() < goblin2.size()) {
@@ -33,6 +31,8 @@ void Gotoshaman() {
 }
 
 int main() {
+  std::deque<int> goblin1;
+  std::deque<int> goblin2;
   int count;
   std::cin >> count;
   for (int i = 0; i < count; i++) {
@@ -41,13 +41,13 @@ int main() {
     if (ch == '+') {
       int number;
       std::cin >> number;
-      Defolt(number);
+      Defolt(number, goblin1, goblin2);
     } else if (ch == '*') {
       int number;
       std::cin >> number;
-      Vipgoblin(number);
+      Vipgoblin(number, goblin1,goblin2);
     } else {
-      Gotoshaman();
+      Gotoshaman(goblin1, goblin2);
     }
   }
 }
