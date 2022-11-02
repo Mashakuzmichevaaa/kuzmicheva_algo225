@@ -30,7 +30,8 @@ int main() {
     if (left == 0) {
       coord = coordinates[right];
     } else {
-      coord = coordinates[right] / pow(coordinates[left - 1], left / (right + 1.0));
+      coord =
+          coordinates[right] / pow(coordinates[left - 1], left / (right + 1.0));
     }
     double degree = (right + 1) / (right - left + 1.0);
     double answer = pow(coord, degree);
