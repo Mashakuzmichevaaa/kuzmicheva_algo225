@@ -1,98 +1,95 @@
 #include <iostream>
 #include <string>
 
-class Queue {
- private:
-  int data_[200000];
-  int min_[200000];
-  int start_, end_, startmin_, endmin_;
-
- public:
-  Queue() : start_(0), end_(0), startmin_(0), endmin_(0) {}
-
-  void Enqueue(int a) {
-    data_[end_] = a;
-    end_++;
-    std::cout << "ok" << std::endl;
-    while (endmin_ > startmin_) {
-      if (a <= data_[min_[endmin_ - 1]]) {
-        endmin_--;
-      } else {
-        break;
-      }
-    }
-    min_[endmin_] = end_ - 1;
-    ++endmin_;
-  }
-
-  void Dequeue() {
-    if (end_ == start_) {
-      std::cout << "error" << std::endl;
+void Enqueue(int a, int* sos, int* data, int* min) {
+  int k = sos[0];
+  data[k] = a;
+  sos[0]++;
+  std::cout << "ok" << std::endl;
+  while (sos[1] > sos[2]) {
+    if (a <= data[min[sos[1] - 1]]) {
+      sos[1]--;
     } else {
-      std::cout << data_[start_] << std::endl;
-      start_++;
-      if ((start_ - 1) == min_[startmin_]) {
-        startmin_++;
-      }
+      break;
     }
   }
-
-  void Front() {
-    if ((end_ - start_) == 0) {
-      std::cout << "error" << std::endl;
-    } else {
-      std::cout << data_[start_] << std::endl;
+  min[sos[1]] = sos[0] - 1;
+  ++sos[1];
+}
+void Dequeue(int* sos, int* data, const int* min) {
+  if (sos[0] == sos[3]) {
+    std::cout << "error" << std::endl;
+  } else {
+    std::cout << data[sos[3]] << std::endl;
+    sos[3]++;
+    if ((sos[3] - 1) == min[sos[2]]) {
+      sos[2]++;
     }
   }
-
-  int Size() { return (end_ - start_); }
-
-  void Clear() {
-    start_ = 0;
-    end_ = 0;
-    std::cout << "ok" << std::endl;
-    startmin_ = 0;
-    endmin_ = 0;
+}
+void Front(const int* sos, int* data) {
+  if ((sos[0] - sos[3]) == 0) {
+    std::cout << "error" << std::endl;
+  } else {
+    std::cout << data[sos[3]] << std::endl;
   }
-
-  void Min() {
-    if ((end_ - start_) == 0) {
-      std::cout << "error" << std::endl;
-    } else {
-      std::cout << data_[min_[startmin_]] << std::endl;
-    }
+}
+int Size(int* sos) { return (sos[0] - sos[3]); }
+void Clear(int* sos) {
+  sos[3] = 0;
+  sos[0] = 0;
+  std::cout << "ok" << std::endl;
+  sos[2] = 0;
+  sos[1] = 0;
+}
+void Min(const int* sos, int* data, const int* min) {
+  if ((sos[0] - sos[3]) == 0) {
+    std::cout << "error" << std::endl;
+  } else {
+    std::cout << data[min[sos[2]]] << std::endl;
   }
-};
-
-void Command(Queue& q) {
+}
+void Command(int* sos, int* data, int* min) {
   std::string input;
   std::cin >> input;
   if (input == "enqueue") {
     int element;
     std::cin >> element;
-    q.Enqueue(element);
+    Enqueue(element, sos, data, min);
   }
   if (input == "dequeue") {
-    q.Dequeue();
+    Dequeue(sos, data, min);
   }
   if (input == "front") {
-    q.Front();
+    Front(sos, data);
   }
   if (input == "size") {
-    std::cout << q.Size() << std::endl;
+    std::cout << Size(sos) << std::endl;
   }
   if (input == "clear") {
-    q.Clear();
+    Clear(sos);
   }
   if (input == "min") {
-    q.Min();
+    Min(sos, data, min);
   }
 }
 int main() {
   int n = 0;
   std::cin >> n;
-  Queue q;
+  int* data = new int[n];
+  int start = 0;
+  int end = 0;
+  int* min = new int[n];
+  int startmin = 0;
+  int endmin = 0;
+  int sos[4];
+  sos[0] = end;
+  sos[1] = endmin;
+  sos[2] = startmin;
+  sos[3] = start;
   for (int i = 0; i < n; ++i) {
-    Command(q);
+    Command(sos, data, min);
   }
+  delete[] data;
+  delete[] min;
 }
