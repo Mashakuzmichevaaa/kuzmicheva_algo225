@@ -41,6 +41,9 @@ int main() {
   std::cin >> k;
   int* mass = new int[n];
   int a_0, a_1;
+  int factor_first = 123;
+  int factor_second = 45;
+  int main_factor = 10000000 + 4321;
   std::cin >> a_0 >> a_1;
   for (int i = 0; i < n; i++) {
     if (i == 0) {
@@ -49,7 +52,8 @@ int main() {
       mass[1] = a_1;
     } else {
       int t;
-      t = (mass[i - 1] * 123 + mass[i - 2] * 45) % (10000000 + 4321);
+      t = (mass[i - 1] * factor_first + mass[i - 2] * factor_second) %
+          main_factor;
       mass[i] = t;
     }
   }
