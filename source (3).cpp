@@ -2,13 +2,6 @@
 #include <iostream>
 #include <vector>
 
-void Rank(unsigned long long max, int& count) {
-  while (max > 0) {
-    count++;
-    max /= 10;
-  }
-}
-
 void LSD(std::vector<unsigned long long>& mass, int count, int n) {
   unsigned long long cur_pow = 1;
   std::vector<unsigned long long> res(n);
@@ -49,7 +42,7 @@ int main() {
       max = mass[i];
     }
   }
-  Rank(max, count);
+  count = log10(max) + 1;
   LSD(mass, count, n);
   for (int i = 0; i < n; i++) {
     std::cout << mass[i] << '\n';
